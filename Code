@@ -1,0 +1,152 @@
+class COSTUMER():
+    def __init__(self, ID, PASSWORD, NAME):
+        self.id = ID
+        self.password = PASSWORD
+        self.name = NAME
+        self.balance = 0
+
+
+class BANK():
+    def __init__(self):
+        self.costumers = list()
+
+    def costumer_ol(self, ID: str, PASSWORD: str, NAME: str):
+        self.costumers.append(COSTUMER(ID, PASSWORD, NAME))
+        print("Customer Registration Successful")
+
+
+def main():
+    bank = BANK()
+    while True:
+        print("[1] I'm a Client \ n [2] Become a Client")
+        selc = input("Select: ")
+        if selc != "1" and selc != "2":
+            print("Wrong Action.")
+        if selc == "1":
+            ids = [i.id for i in bank.costumers]  # kısa yoldan id çekme.
+            ID = input("ID: ")
+            if ID in ids:
+                for costumer in bank.costumers:
+                    if ID == costumer.id:
+                        print("Welcome {0}".format(costumer.name))
+                        password = input(
+                            "Please enter your password to take action: ")
+                        if password == costumer.password:
+                            while True:
+                                print(
+                                    """[1] Check Balance \ n [2] Deposit (My Own Account) \ n [3] Deposit (To Someone else's Account) \ n [4] Withdraw \ n [5] Checkout"""
+                                )
+                                selc2 = input("Select: ")
+                                if selc2 != "1" and selc2 != "2":
+                                    print("Wrong Action.")
+                                if selc2 == "1":
+                                    print("Your Balance: {0}".format(
+                                        costumer.balance))
+                                    input(
+                                        "Press 'enter' to return to the Main Menu."
+                                    )
+                                elif selc2 == "2":
+                                    quantity = int(input("Miktar: "))
+                                    okay = input(
+                                        "Do You Confirm the Deposit of {0} $ to Your Own Account? Y / N\n"
+                                        .format(quantity))
+                                    if okay != "Y" or okay != "y" or okay != "N" or okay != "n":
+                                        print(
+                                            "Please use either 'Y' or 'N' options."
+                                        )
+                                    if okay == "Y" or okay == "y":
+                                        costumer.balance += quantity
+                                        print(
+                                            "Deposit Successful. \n New Balance: {0} Dolars"
+                                            .format(costumer.balance))
+                                        input(
+                                            "Press 'enter' to return to the Main Menu."
+                                        )
+                                    elif okay == "H" or okay == "h":
+                                        print("transaction canceled!")
+                                        input(
+                                            "Press 'enter' to return to the Main Menu."
+                                        )
+                                elif selc2 == "3":
+                                    id_searched = input(
+                                        "The ID of the Customer You Want to Send Money to: "
+                                    )
+                                    if id_searched in ids:
+                                        for other_costumer in bank.costumers:
+                                            if id_searched == other_costumer.id:
+                                                quantity = int(
+                                                    input("Quantity: "))
+                                                if quantity <= costumer.balance:
+                                                    okay = input(
+                                                        "Do you Confirm that our Customer named {0} has invested $ {1} to his Account? Y/N\n"
+                                                        .format(
+                                                            costumer.name,
+                                                            quantity))
+                                                    if okay != "Y" or okay != "y" or okay != "N" or okay != "n":
+                                                        print(
+                                                            "Please use either 'Y' or 'N' options."
+                                                        )
+                                                    if okay == "Y" or okay == "y":
+                                                        costumer.balance -= quantity
+                                                        other_costumer.balance += quantity
+                                                        print(
+                                                            "Sending Money Successful."
+                                                        )
+                                                        input(
+                                                            "Press 'enter' to return to the Main Menu."
+                                                        )
+                                                    elif okay == "H" or okay == "h":
+                                                        print(
+                                                            "transaction canceled!"
+                                                        )
+                                                        input(
+                                                            "Press 'enter' to return to the Main Menu."
+                                                        )
+                                                else:
+                                                    print(
+                                                        "Your Balance is Insufficient!"
+                                                    )
+                                                    input(
+                                                        "Press 'enter' to return to the Main Menu."
+                                                    )
+                                    else:
+                                        print("No Customers Found!")
+                                        input(
+                                            "Press 'enter' to return to the Main Menu."
+                                        )
+                                elif selc2 == "4":
+                                    quantity = int(input("Quantity: "))
+                                    if quantity <= costumer.balance:
+                                        costumer.balance -= quantity
+                                        print("Withdraw Successful.")
+                                        input(
+                                            "Press 'enter' to return to the Main Menu."
+                                        )
+                                    else:
+                                        print("Your Balance is Insufficient!")
+                                        input(
+                                            "Press 'enter' to return to the Main Menu."
+                                        )
+                                elif selc2 == "5":
+                                    break
+                        else:
+                            print("Wrong Password!")
+                            input("Press 'enter' to return to the Main Menu.")
+            else:
+                print("No Customers Found!")
+                input("Press 'enter' to return to the Main Menu.")
+
+        elif selc == "2":
+            try:
+                ID = input("ID: ")
+                PASSWORD = input("Password: ")
+                NAME = input("Name: ")
+            except:
+                print("It's over!")
+            bank.costumer_ol(ID, PASSWORD, NAME)
+
+
+if __name__ == "__main__":
+    main()
+    #progam direkt olarak çalıştırıldığında bu eşitlik sağlanır
+    #başka bir programın içine import edilmiş halde iken bu eşitlik sağlanmaz
